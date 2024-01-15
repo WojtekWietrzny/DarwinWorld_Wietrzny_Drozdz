@@ -192,10 +192,13 @@ public abstract class AbstractWorldMap implements WorldMap{
                     continue;
                 }
                 Animal child = potentialParent1.createChild(potentialParent2, this.minMutations, this.maxMutations);
-                potentialParent1.reduceEnergy(this.energyToReproduce);
-                potentialParent2.reduceEnergy(this.energyToReproduce);
+                potentialParent1.reduceEnergy(this.energyConsumedByReproduction);
+                potentialParent1.increaseChildCount();
+                potentialParent2.reduceEnergy(this.energyConsumedByReproduction);
+                potentialParent2.increaseChildCount();
+                child.setEnergy(2*energyConsumedByReproduction);
                 children.add(child);
-                this.totalAnimalEnergy = this.totalAnimalEnergy - 2*this.energyToReproduce + child.getEnergy();
+                this.totalAnimalEnergy = this.totalAnimalEnergy - 2*this.energyConsumedByReproduction + child.getEnergy();
             }
         }
 
@@ -304,6 +307,9 @@ public abstract class AbstractWorldMap implements WorldMap{
     }
 
     public float getAverageAnimalEnergy(){
+        if (animalsQuantity == 0){
+            return 0;
+        }
         return (float) this.totalAnimalEnergy /this.animalsQuantity;
     }
 
@@ -312,6 +318,9 @@ public abstract class AbstractWorldMap implements WorldMap{
     }
 
     public float getAverageChildCount(){
+        if (animalsQuantity == 0){
+            return 0;
+        }
         int totalChildren = 0;
         for (Animal animal  : this.animals){
             totalChildren += animal.getChildCount();

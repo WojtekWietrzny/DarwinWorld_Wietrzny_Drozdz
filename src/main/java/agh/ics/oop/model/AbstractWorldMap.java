@@ -345,6 +345,10 @@ public abstract class AbstractWorldMap implements WorldMap{
         return (float) totalChildren / this.animalsQuantity;
     }
 
+    public ArrayList<Integer> getMostPopularDna() {
+        return mostPopularDna;
+    }
+
     public String toString() {
         return new MapVisualizer(this).draw(this.getCurrentBounds().lowerLeft(), getCurrentBounds().upperRight());
     }

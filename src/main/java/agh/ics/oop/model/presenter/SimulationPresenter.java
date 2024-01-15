@@ -32,7 +32,10 @@ public class SimulationPresenter implements MapChangeListener {
     private GridPane mapGrid;
     private WorldMap worldMap;
     private int simulationCounter = 1;
+    private ArrayList<Simulation> simulations = new ArrayList<>(1);
+    public SimulationPresenter(){
 
+    }
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
 
@@ -55,17 +58,6 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
-
-    /*public void drawMap(WorldMap worldMap){
-        clearGrid();
-        MapVisualizer mapVisualizer = new MapVisualizer(worldMap);
-        Vector2d lowerLeft = worldMap.getCurrentBounds().lowerLeft();
-        Vector2d upperRight = worldMap.getCurrentBounds().upperRight();
-        String mapContent = mapVisualizer.draw(lowerLeft, upperRight);
-        infoLabel.setText(mapContent);
-    }*/
-
-
     public void drawMap(AbstractWorldMap worldMap) {
         clearGrid();
 
@@ -107,7 +99,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
     public void onSimulationStartClicked() throws Exception {
         if(simulationCounter %2 == 0){
-            SimulationApp.startSimulation(simulationCounter);
+            SimulationApp.startSimulation(simulationCounter,this);
         }
         else{
 
@@ -144,7 +136,7 @@ public class SimulationPresenter implements MapChangeListener {
             simulations.add(simulation);
             worldMap = simulation.getWorldMap();
             this.setWorldMap(worldMap);
-            SimulationEngine simulationEngine = new SimulationEngine(simulations);
+            SimulationEngine simulationEngine = new SimulationEngine(this.simulations);
             Thread engineThread = new Thread(simulationEngine);
             engineThread.start();
         }

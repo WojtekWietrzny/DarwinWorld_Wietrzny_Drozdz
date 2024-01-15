@@ -75,7 +75,7 @@ public class MapCellTest {
 
     @Test
     public void testAddAndRemoveAnimal() {
-        SphereWorldMap map = new SphereWorldMap(10,10,BehaviourType.CompletePredestination, 8);
+        SphereWorldMap map = new SphereWorldMap(10,10,BehaviourType.CompletePredestination, 8, 0, 0);
         Animal animal = new Animal(map);
         assertTrue(mapCell.getAnimals().isEmpty());
 
@@ -88,7 +88,7 @@ public class MapCellTest {
 
     @Test
     public void testAnimalDied() {
-        SphereWorldMap map = new SphereWorldMap(10,10,BehaviourType.CompletePredestination, 8);
+        SphereWorldMap map = new SphereWorldMap(10,10,BehaviourType.CompletePredestination, 8, 0,0);
         Animal animal = new Animal(map);
         mapCell.addAnimal(animal);
         assertTrue(mapCell.getAnimals().contains(animal));

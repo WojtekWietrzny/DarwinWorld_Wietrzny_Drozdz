@@ -20,7 +20,7 @@ class TunnelWorldMapTest {
     }
     @Test
     void testAbstractWorldMap() {
-        AbstractWorldMap worldMap = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8);
+        AbstractWorldMap worldMap = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8, 0, 0);
 
         worldMap.generateAnimals(5);
         assertEquals(5, worldMap.getAnimalsQuantity());
@@ -33,7 +33,7 @@ class TunnelWorldMapTest {
 
     @Test
     void testSphereWorldMap() {
-        SphereWorldMap sphereWorldMap = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8);
+        SphereWorldMap sphereWorldMap = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8, 0, 0);
 
         assertTrue(sphereWorldMap.canMoveTo(new Vector2d(5, 5)));
         assertFalse(sphereWorldMap.canMoveTo(new Vector2d(15, 15))); // Adjust coordinates based on your map size

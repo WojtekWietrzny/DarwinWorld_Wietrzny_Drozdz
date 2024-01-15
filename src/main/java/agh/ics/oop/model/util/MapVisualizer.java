@@ -29,9 +29,8 @@ public class MapVisualizer {
      *
      * @param map
      */
-    public MapVisualizer(AbstractWorldMap map) {
-        this.map = map;
-    }
+    //gettery
+    public MapVisualizer(AbstractWorldMap map) {this.map = map;}
 
     /**
      * Convert selected region of the map into a string. It is assumed that the
@@ -42,6 +41,7 @@ public class MapVisualizer {
      * @param upperRight The upper right corner of the region that is drawn.
      * @return String representation of the selected region of the map.
      */
+    //Funkcjonalność
     public String draw(Vector2d lowerLeft, Vector2d upperRight) {
         StringBuilder builder = new StringBuilder();
         builder.append(" y\\x ");

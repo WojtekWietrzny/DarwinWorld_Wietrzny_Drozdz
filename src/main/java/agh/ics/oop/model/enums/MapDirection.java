@@ -2,6 +2,7 @@ package agh.ics.oop.model.enums;
 
 import agh.ics.oop.model.Vector2d;
 
+//Enum odpowiedzialny za orientacje oraz przesuwanie i reprezentacje zwierzęcia
 public enum MapDirection {
     NORTH,
     NORTHEAST,
@@ -12,6 +13,7 @@ public enum MapDirection {
     WEST,
     NORTHWEST;
 
+    //Reprezentacja przy rysowaniu mapy w konsoli
     public String toString(){
         return switch(this){
             case NORTH -> "Północ";

@@ -36,11 +36,13 @@ public class SimulationPresenter implements MapChangeListener {
     public SimulationPresenter(){
 
     }
+    //settery
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
 
     }
 
+    //gettery
     public WorldMap getWorldMap() {
         return worldMap;
     }
@@ -51,13 +53,8 @@ public class SimulationPresenter implements MapChangeListener {
             drawMap(worldMap);
         });
     }
+    //funkcjonalność
 
-
-    private void clearGrid() {
-        mapGrid.getChildren().clear();
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
     public void drawMap(AbstractWorldMap worldMap) {
         clearGrid();
 
@@ -97,6 +94,12 @@ public class SimulationPresenter implements MapChangeListener {
         }
 
     }
+    private void clearGrid() {
+        mapGrid.getChildren().clear();
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+    }
+
     public void onSimulationStartClicked() throws Exception {
         if(simulationCounter %2 == 0){
             SimulationApp.startSimulation(simulationCounter,this);

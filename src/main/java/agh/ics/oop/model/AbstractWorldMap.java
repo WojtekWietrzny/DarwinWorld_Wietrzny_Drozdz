@@ -7,15 +7,13 @@ import java.util.*;
 
 public abstract class AbstractWorldMap implements WorldMap{
 
-
+    //Atrybuty
     protected final Map<Vector2d, MapCell> elements = new HashMap<>();
     protected final List<Animal> animals = new ArrayList<>();
     protected List<Vector2d> allPositions = new ArrayList<>();
     protected List<Vector2d> emptyPositionsPreferred = new ArrayList<>();
     protected List<Vector2d> emptyPositionsNotPreferred = new ArrayList<>();
-    protected int animalsQuantity = 0; // Czy nie wystarczy nam po prostu animals.size()?,
-    // nie bo to się przydaje potem przy statystykach, żeby trackować ile się przewinęło w ogóle przez program
-    //ale faktycznie do kodu w pętli lepiej używać size
+    protected int animalsQuantity = 0;
     protected int totalAnimalEnergy = 0;
     protected int totalDeadAnimalAge = 0;
     protected int deathCount = 0;
@@ -33,6 +31,7 @@ public abstract class AbstractWorldMap implements WorldMap{
     private static int nextId = 0;
     private final int id = nextId++;
 
+    //Konstruktory
     public AbstractWorldMap(int width, int height, BehaviourType behaviourType, int genomeSize, int minMutations, int maxMutations){
         Vector2d lowerLeft = new Vector2d(0,0);
         Vector2d upperRight = new Vector2d(width, height);
@@ -45,7 +44,6 @@ public abstract class AbstractWorldMap implements WorldMap{
         float midPoint = Math.round(height/2);
         startMap(width, height);
         allPositions.sort((o1, o2) -> Float.compare(Math.abs(o1.getY() - midPoint), Math.abs(o2.getY() - midPoint)));
-
 
         for(int i = 0; i < (int) Math.round(0.2*width*height);i++){
             Vector2d position = allPositions.get(i);
@@ -71,6 +69,57 @@ public abstract class AbstractWorldMap implements WorldMap{
         }
     }
 
+    //gettery
+    public ArrayList<Integer> getMostPopularDna() {return mostPopularDna;}
+    public MapCell getElement(Vector2d position) {return elements.get(position);}
+    public int getAnimalsQuantity(){return animalsQuantity;}
+    public List<Vector2d> getEmptyPositionsNotPreferred() {return emptyPositionsNotPreferred;}
+    public List<Vector2d> getEmptyPositionsPreferred() {return emptyPositionsPreferred;}
+    public float getAverageLifespan(){return (float) this.totalDeadAnimalAge / this.deathCount;}
+    @Override
+    public abstract List<Animal> getOrderedAnimals(List<Animal> animals_listed);
+    @Override
+    public Boundary getCurrentBounds() {return bounds;}
+    @Override
+    public int getId() {return id;}
+    public int getGrassCount(){
+        int positionsAmount = bounds.upperRight().getX() * bounds.upperRight().getY();
+        return positionsAmount  - emptyPositionsPreferred.size() - emptyPositionsNotPreferred.size();
+    }
+    public int getEmptyPositionCount(){
+        int answ = 0;
+        for(MapCell mapCell : this.elements.values()){
+            if (!mapCell.isOccupied()){
+                answ += 1;
+            }
+        }
+        return answ;
+    }
+    public float getAverageAnimalEnergy(){
+        if (animalsQuantity == 0){
+            return 0;
+        }
+        return (float) this.totalAnimalEnergy /this.animalsQuantity;
+    }
+    public float getAverageChildCount(){
+        if (animalsQuantity == 0){
+            return 0;
+        }
+        int totalChildren = 0;
+        for (Animal animal  : this.animals){
+            totalChildren += animal.getChildCount();
+        }
+        return (float) totalChildren / this.animalsQuantity;
+    }
+    //settery
+    public void setAnimalEnergy(int energy){
+        this.totalAnimalEnergy = 0;
+        for (Animal animal : this.animals){
+            animal.setEnergy(energy);
+            this.totalAnimalEnergy += energy;
+        }
+    }
+    //logika do Obserwatora
     public  void addObserver(MapChangeListener observer){
         observers.add(observer);
     }
@@ -82,8 +131,7 @@ public abstract class AbstractWorldMap implements WorldMap{
             observer.mapChanged(this);
         }
     }
-
-
+    //Funkcjonalność
     public void generateAnimals(int amount){
         Random random = new Random();
         int x, y;
@@ -95,11 +143,7 @@ public abstract class AbstractWorldMap implements WorldMap{
         }
         notifyObservers();
     }
-
-    public void advanceAnimals(){
-        ;
-    }
-
+    public void advanceAnimals(){}
     public boolean canMoveTo(Vector2d position){
         return position.follows(bounds.lowerLeft()) && position.precedes(bounds.upperRight());
     }
@@ -127,45 +171,18 @@ public abstract class AbstractWorldMap implements WorldMap{
             animals.add(animal);
         }
     }
-
-
-
+    public void move(Animal animal, Vector2d newPosition){
+        Vector2d oldPosition = animal.getPosition();
+        this.elements.get(oldPosition).removeAnimal(animal);
+        animal.setPosition(newPosition);
+        this.elements.get(newPosition).addAnimal(animal);
+    }
     public void reduceAnimalEnergy(){
         for (Animal animal : this.animals){
             animal.reduceEnergy(1);
             if (animal.getEnergy() >= 0){
                 this.totalAnimalEnergy -= 1;
             }
-        }
-    }
-
-    public void ageAnimals(){
-        for (Animal animal : this.animals){
-            animal.age();
-        }
-    }
-
-    public void setAnimalEnergy(int energy){
-        this.totalAnimalEnergy = 0;
-        for (Animal animal : this.animals){
-            animal.setEnergy(energy);
-            this.totalAnimalEnergy += energy;
-        }
-    }
-
-    public void removeDead(){
-        ArrayList<Animal> animalsToRemove = new ArrayList<>();
-        for (Animal animal : this.animals){
-            if (animal.getEnergy() < 0){
-                this.elements.get(animal.getPosition()).animalDied(animal);
-                animalsToRemove.add(animal);
-            }
-        }
-        for (Animal animal : animalsToRemove){
-            this.animals.remove(animal);
-            this.animalsQuantity -= 1;
-            this.deathCount += 1;
-            this.totalDeadAnimalAge += animal.getAge();
         }
     }
     public void eat(){
@@ -185,6 +202,26 @@ public abstract class AbstractWorldMap implements WorldMap{
             }
         }
 
+    }
+    public void ageAnimals(){
+        for (Animal animal : this.animals){
+            animal.age();
+        }
+    }
+    public void removeDead(){
+        ArrayList<Animal> animalsToRemove = new ArrayList<>();
+        for (Animal animal : this.animals){
+            if (animal.getEnergy() < 0){
+                this.elements.get(animal.getPosition()).animalDied(animal);
+                animalsToRemove.add(animal);
+            }
+        }
+        for (Animal animal : animalsToRemove){
+            this.animals.remove(animal);
+            this.animalsQuantity -= 1;
+            this.deathCount += 1;
+            this.totalDeadAnimalAge += animal.getAge();
+        }
     }
     public void reproduce(){
         ArrayList<Animal> children = new ArrayList<>();
@@ -251,12 +288,10 @@ public abstract class AbstractWorldMap implements WorldMap{
     public boolean freePlaces(){
             return  ((emptyPositionsNotPreferred.size() > 0) || (emptyPositionsPreferred.size() > 0));
     }
-
     public void addGrass(Vector2d position){
         MapCell cell = elements.get(position);
         cell.growGrass();
     }
-
     //wyrastanie określonej ilości trawy - cała 1 faza dnia
     public void growGrass(int grassDaily){
         for(int i=0; i < grassDaily; i++){
@@ -266,89 +301,6 @@ public abstract class AbstractWorldMap implements WorldMap{
             }
         }
     }
-
-    public MapCell getElement(Vector2d position) {
-        return elements.get(position);
-    }
-
-    public int getAnimalsQuantity(){
-        return animalsQuantity;
-    }
-
-
-    public List<Vector2d> getEmptyPositionsNotPreferred() {
-        return emptyPositionsNotPreferred;
-    }
-
-    public List<Vector2d> getEmptyPositionsPreferred() {
-        return emptyPositionsPreferred;
-    }
-
-    @Override
-    public abstract List<Animal> getOrderedAnimals(List<Animal> animals_listed);
-
-    @Override
-    public Boundary getCurrentBounds() {
-        return bounds;
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public void move(Animal animal, Vector2d newPosition){
-        Vector2d oldPosition = animal.getPosition();
-        this.elements.get(oldPosition).removeAnimal(animal);
-        animal.setPosition(newPosition);
-        this.elements.get(newPosition).addAnimal(animal);
-    }
-
-    public int getAnimalCount(){
-        return animalsQuantity;
-    }
-
-    public int getGrassCount(){
-        int positionsAmount = bounds.upperRight().getX() * bounds.upperRight().getY();
-        return positionsAmount  - emptyPositionsPreferred.size() - emptyPositionsNotPreferred.size();
-    }
-
-    public int getEmptyPositionCount(){
-        int answ = 0;
-        for(MapCell mapCell : this.elements.values()){
-            if (!mapCell.isOccupied()){
-                answ += 1;
-            }
-        }
-        return answ;
-    }
-
-    public float getAverageAnimalEnergy(){
-        if (animalsQuantity == 0){
-            return 0;
-        }
-        return (float) this.totalAnimalEnergy /this.animalsQuantity;
-    }
-
-    public float getAverageLifespan(){
-        return (float) this.totalDeadAnimalAge / this.deathCount;
-    }
-
-    public float getAverageChildCount(){
-        if (animalsQuantity == 0){
-            return 0;
-        }
-        int totalChildren = 0;
-        for (Animal animal  : this.animals){
-            totalChildren += animal.getChildCount();
-        }
-        return (float) totalChildren / this.animalsQuantity;
-    }
-
-    public ArrayList<Integer> getMostPopularDna() {
-        return mostPopularDna;
-    }
-
     public String toString() {
         return new MapVisualizer(this).draw(this.getCurrentBounds().lowerLeft(), getCurrentBounds().upperRight());
     }

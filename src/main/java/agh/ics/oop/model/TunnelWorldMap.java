@@ -10,7 +10,7 @@ public class TunnelWorldMap extends AbstractWorldMap{
 
     public TunnelWorldMap(int width, int height, BehaviourType behaviourType, int genomeSize, int minMutations, int maxMutations) {
         super(width, height, behaviourType, genomeSize, minMutations, maxMutations);
-        generateTunnels(width/4);
+        generateTunnels(width);
     }
 
     public void generateTunnels(int amount){

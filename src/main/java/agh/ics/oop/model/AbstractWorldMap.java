@@ -24,18 +24,22 @@ public abstract class AbstractWorldMap implements WorldMap{
     private final int grassNutritionalValue = 3;
     private final BehaviourType behaviourType;
     private final int genomeSize;
+    private final int minMutations;
+    private final int maxMutations;
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
     private static int nextId = 0;
     private final int id = nextId++;
 
-    public AbstractWorldMap(int width, int height, BehaviourType behaviourType, int genomeSize){
+    public AbstractWorldMap(int width, int height, BehaviourType behaviourType, int genomeSize, int minMutations, int maxMutations){
         Vector2d lowerLeft = new Vector2d(0,0);
         Vector2d upperRight = new Vector2d(width, height);
         Boundary mapBounds = new Boundary(lowerLeft, upperRight);
         this.bounds = mapBounds;
         this.behaviourType = behaviourType;
         this.genomeSize = genomeSize;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
         float midPoint = Math.round(height/2);
         startMap(width, height);
         allPositions.sort((o1, o2) -> Float.compare(Math.abs(o1.getY() - midPoint), Math.abs(o2.getY() - midPoint)));
@@ -187,7 +191,7 @@ public abstract class AbstractWorldMap implements WorldMap{
                 if (potentialParent2.getEnergy() < this.energyToReproduce){
                     continue;
                 }
-                Animal child = potentialParent1.createChild(potentialParent2);
+                Animal child = potentialParent1.createChild(potentialParent2, this.minMutations, this.maxMutations);
                 potentialParent1.reduceEnergy(this.energyToReproduce);
                 potentialParent2.reduceEnergy(this.energyToReproduce);
                 children.add(child);

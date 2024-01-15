@@ -13,7 +13,7 @@ class TunnelWorldMapTest {
     void testGenerateTunnels() {
         BehaviourType behaviour =  CompletePredestination;
         int genomeSize = 8;
-        TunnelWorldMap tunnelWorldMap = new TunnelWorldMap(10,10, behaviour, genomeSize);
+        TunnelWorldMap tunnelWorldMap = new TunnelWorldMap(10,10, behaviour, genomeSize, 0, 0);
 
         tunnelWorldMap.generateTunnels(3);
 
@@ -42,7 +42,7 @@ class TunnelWorldMapTest {
 
     @Test
     void testTunnelWorldMap() {
-        TunnelWorldMap tunnelWorldMap = new TunnelWorldMap(10, 10, BehaviourType.CompletePredestination, 8);
+        TunnelWorldMap tunnelWorldMap = new TunnelWorldMap(10, 10, BehaviourType.CompletePredestination, 8, 0, 0);
 
         assertTrue(tunnelWorldMap.canMoveTo(new Vector2d(5, 5)));
         assertFalse(tunnelWorldMap.canMoveTo(new Vector2d(15, 5))); // Adjust coordinates based on your map size
@@ -53,7 +53,7 @@ class TunnelWorldMapTest {
     void testAdvanceAnimals() {
         BehaviourType behaviour =  CompletePredestination;
         int genomeSize = 8;
-        TunnelWorldMap tunnelWorldMap = new TunnelWorldMap(10,10, behaviour, genomeSize);
+        TunnelWorldMap tunnelWorldMap = new TunnelWorldMap(10,10, behaviour, genomeSize, 0, 0);
 
         Animal animal = new Animal(tunnelWorldMap, new Vector2d(2,2), new Gene(genomeSize,behaviour));
         tunnelWorldMap.place(animal);

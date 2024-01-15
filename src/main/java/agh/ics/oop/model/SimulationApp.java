@@ -31,7 +31,7 @@ public class SimulationApp extends Application {
         primaryStage.setTitle("Simulation app");
         primaryStage.show();
     }
-    public static void startSimulation(int simulationCounter) {
+    public static void startSimulation(int simulationCounter, SimulationPresenter presenter) {
         try {
             FXMLLoader loader = new FXMLLoader(SimulationApp.class.getClassLoader().getResource("simulation.fxml"));
             BorderPane simulationRoot = loader.load();
@@ -40,8 +40,8 @@ public class SimulationApp extends Application {
             simulationStage.setTitle("Simulation ");
             simulationStage.setScene(new Scene(simulationRoot, 400, 300));
             simulationStage.show();
-            SimulationPresenter presenter = loader.getController();
-
+            SimulationPresenter presenter2 = loader.getController();
+            presenter2.setWorldMap(presenter.getWorldMap());
 
             // Increment the simulation counter for the next simulation
             simulationCounter++;

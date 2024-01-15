@@ -16,6 +16,9 @@ public abstract class AbstractWorldMap implements WorldMap{
     protected int animalsQuantity = 0; // Czy nie wystarczy nam po prostu animals.size()?,
     // nie bo to się przydaje potem przy statystykach, żeby trackować ile się przewinęło w ogóle przez program
     //ale faktycznie do kodu w pętli lepiej używać size
+    protected int totalAnimalEnergy = 0;
+    protected int totalDeadAnimalAge = 0;
+    protected int deathCount = 0;
     private final int energyToReproduce = 1;
     private final int energyConsumedByReproduction = 2;
     private final int grassNutritionalValue = 3;
@@ -23,6 +26,8 @@ public abstract class AbstractWorldMap implements WorldMap{
     private final int genomeSize;
     private final int minMutations;
     private final int maxMutations;
+    private Map<ArrayList<Integer>, Integer> genotypes = new HashMap<>();
+    private ArrayList<Integer> mostPopularDna = null;
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
     private static int nextId = 0;
@@ -40,8 +45,6 @@ public abstract class AbstractWorldMap implements WorldMap{
         float midPoint = Math.round(height/2);
         startMap(width, height);
         allPositions.sort((o1, o2) -> Float.compare(Math.abs(o1.getY() - midPoint), Math.abs(o2.getY() - midPoint)));
-        //emptyPositionsPreferred = allPositions.subList(0, (int) Math.round(0.2*width*height));
-        //emptyPositionsNotPreferred = allPositions.subList((int) Math.round(0.2*width*height), allPositions.size());
 
 
         for(int i = 0; i < (int) Math.round(0.2*width*height);i++){
@@ -68,17 +71,18 @@ public abstract class AbstractWorldMap implements WorldMap{
         }
     }
 
-    protected void notifyObservers() {
-        for (MapChangeListener observer : observers) {
-            observer.mapChanged(this);
-        }
-    }
     public  void addObserver(MapChangeListener observer){
         observers.add(observer);
     }
     public  void removeObserver(MapChangeListener observer){
         observers.remove(observer);
     }
+    protected void notifyObservers() {
+        for (MapChangeListener observer : observers) {
+            observer.mapChanged(this);
+        }
+    }
+
 
     public void generateAnimals(int amount){
         Random random = new Random();
@@ -102,26 +106,50 @@ public abstract class AbstractWorldMap implements WorldMap{
 
     public void place(Animal animal) {
         if(canMoveTo(animal.getPosition())){
+            this.animalsQuantity += 1;
+            this.totalAnimalEnergy += animal.getEnergy();
+
+            if (this.genotypes.containsKey(animal.getGene().getDna())){
+                this.genotypes.put(animal.getGene().getDna(), this.genotypes.get(animal.getGene().getDna()) + 1);
+            }else{
+                this.genotypes.put(animal.getGene().getDna(), 1);
+            }
+            if (this.mostPopularDna == null){
+                this.mostPopularDna = animal.getGene().getDna();
+            }else{
+                if (this.genotypes.get(animal.getGene().getDna()) > this.genotypes.get(this.mostPopularDna)){
+                    this.mostPopularDna = animal.getGene().getDna();
+                }
+            }
+
+
             elements.get(animal.getPosition()).addAnimal(animal);
-            animalsQuantity += 1;
             animals.add(animal);
         }
     }
 
-    public void addGrass(Vector2d position){
-            MapCell cell = elements.get(position);
-            cell.growGrass();
-    }
+
 
     public void reduceAnimalEnergy(){
         for (Animal animal : this.animals){
             animal.reduceEnergy(1);
+            if (animal.getEnergy() >= 0){
+                this.totalAnimalEnergy -= 1;
+            }
+        }
+    }
+
+    public void ageAnimals(){
+        for (Animal animal : this.animals){
+            animal.age();
         }
     }
 
     public void setAnimalEnergy(int energy){
+        this.totalAnimalEnergy = 0;
         for (Animal animal : this.animals){
             animal.setEnergy(energy);
+            this.totalAnimalEnergy += energy;
         }
     }
 
@@ -136,6 +164,8 @@ public abstract class AbstractWorldMap implements WorldMap{
         for (Animal animal : animalsToRemove){
             this.animals.remove(animal);
             this.animalsQuantity -= 1;
+            this.deathCount += 1;
+            this.totalDeadAnimalAge += animal.getAge();
         }
     }
     public void eat(){
@@ -144,6 +174,8 @@ public abstract class AbstractWorldMap implements WorldMap{
             if (this.elements.get(position).isGrassPresent()){
                 this.elements.get(position).eatGrass();
                 animal.addEnergy(this.grassNutritionalValue);
+                animal.increaseGrassEaten();
+                this.totalAnimalEnergy += this.grassNutritionalValue;
                 if(this.elements.get(position).isJungle()){
                     emptyPositionsPreferred.add(position);
                 }
@@ -173,7 +205,13 @@ public abstract class AbstractWorldMap implements WorldMap{
                     continue;
                 }
                 Animal child = potentialParent1.createChild(potentialParent2, this.minMutations, this.maxMutations);
+                potentialParent1.reduceEnergy(this.energyConsumedByReproduction);
+                potentialParent1.increaseChildCount();
+                potentialParent2.reduceEnergy(this.energyConsumedByReproduction);
+                potentialParent2.increaseChildCount();
+                child.setEnergy(2*energyConsumedByReproduction);
                 children.add(child);
+                this.totalAnimalEnergy = this.totalAnimalEnergy - 2*this.energyConsumedByReproduction + child.getEnergy();
             }
         }
 
@@ -214,6 +252,10 @@ public abstract class AbstractWorldMap implements WorldMap{
             return  ((emptyPositionsNotPreferred.size() > 0) || (emptyPositionsPreferred.size() > 0));
     }
 
+    public void addGrass(Vector2d position){
+        MapCell cell = elements.get(position);
+        cell.growGrass();
+    }
 
     //wyrastanie określonej ilości trawy - cała 1 faza dnia
     public void growGrass(int grassDaily){
@@ -269,6 +311,42 @@ public abstract class AbstractWorldMap implements WorldMap{
     public int getGrassCount(){
         int positionsAmount = bounds.upperRight().getX() * bounds.upperRight().getY();
         return positionsAmount  - emptyPositionsPreferred.size() - emptyPositionsNotPreferred.size();
+    }
+
+    public int getEmptyPositionCount(){
+        int answ = 0;
+        for(MapCell mapCell : this.elements.values()){
+            if (!mapCell.isOccupied()){
+                answ += 1;
+            }
+        }
+        return answ;
+    }
+
+    public float getAverageAnimalEnergy(){
+        if (animalsQuantity == 0){
+            return 0;
+        }
+        return (float) this.totalAnimalEnergy /this.animalsQuantity;
+    }
+
+    public float getAverageLifespan(){
+        return (float) this.totalDeadAnimalAge / this.deathCount;
+    }
+
+    public float getAverageChildCount(){
+        if (animalsQuantity == 0){
+            return 0;
+        }
+        int totalChildren = 0;
+        for (Animal animal  : this.animals){
+            totalChildren += animal.getChildCount();
+        }
+        return (float) totalChildren / this.animalsQuantity;
+    }
+
+    public ArrayList<Integer> getMostPopularDna() {
+        return mostPopularDna;
     }
 
     public String toString() {

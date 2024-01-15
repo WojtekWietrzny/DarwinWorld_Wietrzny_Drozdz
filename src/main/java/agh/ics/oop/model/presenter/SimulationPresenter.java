@@ -1,5 +1,6 @@
 package agh.ics.oop.model.presenter;
 
+import agh.ics.oop.ReadParameters;
 import agh.ics.oop.SetupParameters;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
@@ -15,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimulationPresenter implements MapChangeListener {
     @FXML
@@ -30,7 +32,10 @@ public class SimulationPresenter implements MapChangeListener {
     private GridPane mapGrid;
     private WorldMap worldMap;
     private int simulationCounter = 1;
+    private ArrayList<Simulation> simulations = new ArrayList<>(1);
+    public SimulationPresenter(){
 
+    }
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
 
@@ -53,17 +58,6 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
-
-    /*public void drawMap(WorldMap worldMap){
-        clearGrid();
-        MapVisualizer mapVisualizer = new MapVisualizer(worldMap);
-        Vector2d lowerLeft = worldMap.getCurrentBounds().lowerLeft();
-        Vector2d upperRight = worldMap.getCurrentBounds().upperRight();
-        String mapContent = mapVisualizer.draw(lowerLeft, upperRight);
-        infoLabel.setText(mapContent);
-    }*/
-
-
     public void drawMap(AbstractWorldMap worldMap) {
         clearGrid();
 
@@ -105,20 +99,44 @@ public class SimulationPresenter implements MapChangeListener {
     }
     public void onSimulationStartClicked() throws Exception {
         if(simulationCounter %2 == 0){
-            SimulationApp.startSimulation(simulationCounter);
+            SimulationApp.startSimulation(simulationCounter,this);
         }
         else{
+
 
             String setup = moveListTextField.getText();
 
             String[] setupArray = setup.split(" ");
+
+
+            try {
+                List<String[]> existingSetups = ReadParameters.read();
+
+                boolean configExists = false;
+                for (String[] options : existingSetups) {
+                    if (options.length > 0 && options[0].equals(setupArray[0])) {
+                        configExists = true;
+                        break;
+                    }
+                }
+
+                if (!configExists) {
+                    ReadParameters.insertData(setupArray);
+                    System.out.println("New configuration saved successfully.");
+                } else {
+                    System.out.println("Configuration with the same identifier already exists.");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             ArrayList<Simulation> simulations = new ArrayList<>(1);
             SetupParameters parameters = new SetupParameters(setupArray);
             Simulation simulation = new Simulation(parameters);
             simulations.add(simulation);
             worldMap = simulation.getWorldMap();
             this.setWorldMap(worldMap);
-            SimulationEngine simulationEngine = new SimulationEngine(simulations);
+            SimulationEngine simulationEngine = new SimulationEngine(this.simulations);
             Thread engineThread = new Thread(simulationEngine);
             engineThread.start();
         }

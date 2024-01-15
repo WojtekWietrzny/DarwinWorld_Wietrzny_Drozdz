@@ -33,22 +33,4 @@ public class ReadParameters {
         fileWriter.flush();
         fileWriter.close();
     }
-    public static String[] searchByName(String identifier) throws FileNotFoundException {
-        List<String[]> setups = read();
-        for (String[] setup : setups) {
-            if (setup[0].equals(identifier)) {
-                return Arrays.copyOfRange(setup, 0, setup.length);
-            }
-        }
-        return null;
-    }
-    public static String[] getAllNames() throws FileNotFoundException {
-        List<String[]> setups = read();
-        String[] nameList = new String[setups.size() - 1];
-        for (int i = 0; i < nameList.length; i++) {
-            nameList[i] = setups
-                    .get(i + 1)[0];
-        }
-        return nameList;
-    }
 }

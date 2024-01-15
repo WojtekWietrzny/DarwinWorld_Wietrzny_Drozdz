@@ -1,16 +1,19 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.enums.BehaviourType;
+import agh.ics.oop.model.interfaces.WorldElement;
+import agh.ics.oop.model.records.Boundary;
 
 import java.util.List;
 
 public class SphereWorldMap extends AbstractWorldMap {
 
-
+    //Konstruktory
     public SphereWorldMap(int width, int height, BehaviourType behaviourType, int genomeSize, int minMutations, int maxMutations) {
         super(width, height, behaviourType, genomeSize, minMutations, maxMutations);
     }
 
+    // Metody
     @Override
     public void advanceAnimals(){
         for (Animal animal : this.animals){

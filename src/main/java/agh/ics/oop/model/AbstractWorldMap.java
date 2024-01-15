@@ -1,11 +1,14 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.enums.BehaviourType;
+import agh.ics.oop.model.interfaces.MapChangeListener;
+import agh.ics.oop.model.interfaces.WorldMap;
+import agh.ics.oop.model.records.Boundary;
 import agh.ics.oop.model.util.MapVisualizer;
 
 import java.util.*;
 
-public abstract class AbstractWorldMap implements WorldMap{
+public abstract class AbstractWorldMap implements WorldMap {
 
 
     protected final Map<Vector2d, MapCell> elements = new HashMap<>();

@@ -2,11 +2,12 @@ package agh.ics.oop;
 
 import agh.ics.oop.model.*;
 import agh.ics.oop.model.enums.MapType;
+import agh.ics.oop.model.records.SimulationParameters;
 
 public class Simulation implements Runnable{
     private int currentDay;
     private SetupParameters setupParameters;
-    private SimulationParameters  simulationParameters;
+    private SimulationParameters simulationParameters;
     private AbstractWorldMap worldMap;
 
     //SimulationEngine powinien korzystać jakoś z klasy Settings

@@ -1,10 +1,9 @@
-package agh.ics.oop.model.presenter;
+package agh.ics.oop.presenter;
 
-import agh.ics.oop.ReadParameters;
-import agh.ics.oop.SetupParameters;
-import agh.ics.oop.Simulation;
-import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.*;
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.interfaces.MapChangeListener;
+import agh.ics.oop.model.interfaces.WorldMap;
 import agh.ics.oop.model.util.MapVisualizer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

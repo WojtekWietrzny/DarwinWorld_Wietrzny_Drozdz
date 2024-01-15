@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.enums.MapDirection;
+import agh.ics.oop.model.interfaces.WorldElement;
+import agh.ics.oop.model.interfaces.WorldMap;
 
 public class Animal implements WorldElement {
     // Atrybuty

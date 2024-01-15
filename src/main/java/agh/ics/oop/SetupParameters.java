@@ -4,6 +4,7 @@ import agh.ics.oop.model.enums.BehaviourType;
 import agh.ics.oop.model.enums.MapType;
 
 public class SetupParameters {
+    //Atrybuty
     private final String configurationName;
     private final MapType mapType;
     private final BehaviourType behaviourType;
@@ -19,6 +20,7 @@ public class SetupParameters {
     private final int maxMutations;
     private final int genomeSize;
 
+    //Konstruktory
     public SetupParameters(String[] setup) throws Exception{
         this.configurationName = setup[0];
         switch(setup[1]){
@@ -77,58 +79,19 @@ public class SetupParameters {
             throw new Exception("Choose positive genome size");
         }
     }
-
-    public String getConfigurationName() {
-        return configurationName;
-    }
-
-    public MapType getMapType() {
-        return mapType;
-    }
-    public BehaviourType getBehaviourType() {
-        return behaviourType;
-    }
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getStartingPlantAmount() {
-        return startingPlantAmount;
-    }
-
-    public int getPlantGrowthRate() {
-        return plantGrowthRate;
-    }
-
-    public int getStartingAnimalAmount() {
-        return startingAnimalAmount;
-    }
-
-    public int getStartingAnimalEnergy() {
-        return startingAnimalEnergy;
-    }
-
-    public int getEnergyToReproduce() {
-        return energyToReproduce;
-    }
-
-    public int getEnergyConsumedByReproduction() {
-        return energyConsumedByReproduction;
-    }
-
-    public int getMinMutations() {
-        return minMutations;
-    }
-
-    public int getMaxMutations() {
-        return maxMutations;
-    }
-
-    public int getGenomeSize() {
-        return genomeSize;
-    }
+    //gettery
+    public String getConfigurationName() {return configurationName;}
+    public MapType getMapType() {return mapType;}
+    public BehaviourType getBehaviourType() {return behaviourType;}
+    public int getWidth() {return width;}
+    public int getHeight() {return height;}
+    public int getStartingPlantAmount() {return startingPlantAmount;}
+    public int getPlantGrowthRate() {return plantGrowthRate;}
+    public int getStartingAnimalAmount() {return startingAnimalAmount;}
+    public int getStartingAnimalEnergy() {return startingAnimalEnergy;}
+    public int getEnergyToReproduce() {return energyToReproduce;}
+    public int getEnergyConsumedByReproduction() {return energyConsumedByReproduction;}
+    public int getMinMutations() {return minMutations;}
+    public int getMaxMutations() {return maxMutations;}
+    public int getGenomeSize() {return genomeSize;}
 }

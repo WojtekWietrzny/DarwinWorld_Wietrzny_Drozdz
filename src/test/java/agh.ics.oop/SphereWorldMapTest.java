@@ -17,7 +17,7 @@ public class SphereWorldMapTest {
 
     @BeforeEach
     public void setUp() {
-        sphereWorldMap = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8);
+        sphereWorldMap = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8, 0, 0);
     }
 
     @Test

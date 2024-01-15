@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+﻿package agh.ics.oop.model;
 
 import java.util.ArrayList;
 
@@ -75,6 +75,12 @@ public class MapCell {
     public void animalDied(Animal animal){
         removeAnimal(animal);
         upDeathCounter();
+    }
+    public boolean isOccupied(){
+        if (!animals.isEmpty()){
+            return true;
+        }
+        return isGrassPresent();
     }
     public ArrayList<Animal> getAnimals(){ return this.animals; }
 }

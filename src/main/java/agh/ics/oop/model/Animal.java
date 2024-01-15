@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+﻿package agh.ics.oop.model;
 
 import agh.ics.oop.model.enums.MapDirection;
 
@@ -8,6 +8,9 @@ public class Animal implements WorldElement {
     private WorldMap map;
     private Gene gene;
     private int energy;
+    private int age = 0;
+    private int childCount = 0;
+    private int amountOfGrassEaten = 0;
 
     public Animal(WorldMap map){
         this.orientation = MapDirection.NORTH;
@@ -62,6 +65,24 @@ public class Animal implements WorldElement {
     public void addEnergy(int value) { this.energy += value; }
     public void reduceEnergy(int value){ this.energy -= value; }
     public Gene getGene() { return this.gene; }
+    public int getAge(){
+        return this.age;
+    }
+    public int getChildCount(){
+        return this.childCount;
+    }
+    public void increaseChildCount(){
+        this.childCount += 1;
+    }
+    public int getAmountOfGrassEaten(){
+        return this.amountOfGrassEaten;
+    }
+    public void increaseGrassEaten(){
+        this.amountOfGrassEaten += 1;
+    }
+    public void age(){
+        this.age += 1;
+    }
 
     public void move() {
         this.orientation = this.orientation.rotate(this.gene.getCurrent());
@@ -80,10 +101,12 @@ public class Animal implements WorldElement {
         return newPosition;
     }
 
-    public Animal createChild(Animal other, int minMutations, int maxMutations){
-        Gene childGene = this.gene.createChild(other.getGene(), this.energy, other.getEnergy(), minMutations, maxMutations);
+    public Animal createChild(Animal other){
+        Gene childGene = this.gene.createChild(other.getGene(), this.energy, other.getEnergy());
         Vector2d childPosition = this.position;
         WorldMap childMap = this.map;
+        this.increaseChildCount();
+        other.increaseChildCount();
         return new Animal(childMap, childPosition, childGene);
     }
 }

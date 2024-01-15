@@ -1,5 +1,6 @@
 package agh.ics.oop.model.presenter;
 
+import agh.ics.oop.ReadParameters;
 import agh.ics.oop.SetupParameters;
 import agh.ics.oop.Simulation;
 import agh.ics.oop.SimulationEngine;
@@ -15,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimulationPresenter implements MapChangeListener {
     @FXML
@@ -109,9 +111,33 @@ public class SimulationPresenter implements MapChangeListener {
         }
         else{
 
+
             String setup = moveListTextField.getText();
 
             String[] setupArray = setup.split(" ");
+
+
+            try {
+                List<String[]> existingSetups = ReadParameters.read();
+
+                boolean configExists = false;
+                for (String[] options : existingSetups) {
+                    if (options.length > 0 && options[0].equals(setupArray[0])) {
+                        configExists = true;
+                        break;
+                    }
+                }
+
+                if (!configExists) {
+                    ReadParameters.insertData(setupArray);
+                    System.out.println("New configuration saved successfully.");
+                } else {
+                    System.out.println("Configuration with the same identifier already exists.");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             ArrayList<Simulation> simulations = new ArrayList<>(1);
             SetupParameters parameters = new SetupParameters(setupArray);
             Simulation simulation = new Simulation(parameters);

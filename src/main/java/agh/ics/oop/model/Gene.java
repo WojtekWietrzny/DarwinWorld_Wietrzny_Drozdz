@@ -8,6 +8,7 @@ import java.util.Random;
 
 
 public class Gene {
+    // Atrybuty
     private ArrayList<Integer> dna = new ArrayList<Integer>();
     private final BehaviourType behaviourType;
     private int index = 0;
@@ -18,11 +19,15 @@ public class Gene {
         this.behaviourType = behaviourType;
     }
 
+    // Settery
     public void setDna(ArrayList<Integer> dna) {
         this.dna = dna;
     }
+
+    // Gettery
     public ArrayList<Integer> getDna() { return this.dna; }
 
+    // Metody
     public static Gene generateRandomGene(int size, BehaviourType behaviourType){
         Gene newGene = new Gene(size, behaviourType);
         return newGene;

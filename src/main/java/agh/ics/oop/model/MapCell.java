@@ -3,6 +3,8 @@ package agh.ics.oop.model;
 import java.util.ArrayList;
 
 public class MapCell {
+
+    // Atrybuty
     private final ArrayList<Animal> animals;
     private boolean grass = false;
     private boolean jungle = false;
@@ -11,67 +13,38 @@ public class MapCell {
     private Vector2d tunnelDestination;
     private int deathCounter = 0;
 
+    // Konstruktory
+
     public MapCell(){
         this.animals = new ArrayList<>();
     }
 
-    public boolean isTunelStart() {
-        return tunelStart;
-    }
+    // Settery
 
-    public void setTunelStart(boolean tunelStart) {
-        this.tunelStart = tunelStart;
-    }
+    public void setTunelStart(boolean tunelStart) { this.tunelStart = tunelStart; }
+    public void setTunelEnd(boolean tunelEnd) { this.tunelEnd = tunelEnd; }
+    public void setTunnelDestination(Vector2d position){ this.tunnelDestination = position; }
+    public void setJungle(){ this.jungle = true; }
+    public void growGrass(){ grass=true; }
+    public void eatGrass(){ grass=false; }
+    public void upDeathCounter(){ deathCounter += 1; }
+    public void setDeathCounter(int newDeathCounter){ this.deathCounter = newDeathCounter; }
+    public void addAnimal(Animal animal){ this.animals.add(animal); }
+    public void removeAnimal(Animal animal){ this.animals.remove(animal); }
 
-    public void setTunelEnd(boolean tunelEnd) {
-        this.tunelEnd = tunelEnd;
-    }
+    // Gettery
 
-    public boolean isTunelEnd() {
-        return tunelEnd;
-    }
-    public void setTunnelDestination(Vector2d position){
-        this.tunnelDestination = position;
-    }
-    public Vector2d getTunnelDestination(){
-        return tunnelDestination;
-    }
+    public boolean isTunelStart() { return tunelStart; }
+    public boolean isTunelEnd() { return tunelEnd; }
+    public Vector2d getTunnelDestination(){ return tunnelDestination; }
+    public Animal getFirstAnimal(){ return this.animals.get(0); }
+    public boolean isJungle(){ return this.jungle; }
+    public boolean isGrassPresent(){ return grass; }
+    public int getDeathCounter() { return deathCounter; }
+    public ArrayList<Animal> getAnimals(){ return this.animals; }
 
-    public Animal getFirstAnimal(){
-        return this.animals.get(0);
-    }
+    // Metody
 
-    public boolean isJungle(){
-        return this.jungle;
-    }
-    public void setJungle(){
-        this.jungle = true;
-    }
-    public boolean isGrassPresent(){
-        return grass;
-    }
-    public void growGrass(){
-        grass=true;
-    }
-    public void eatGrass(){
-        grass=false;
-    }
-    public void upDeathCounter(){
-        deathCounter += 1;
-    }
-    public void setDeathCounter(int newDeathCounter){
-        this.deathCounter = newDeathCounter;
-    }
-
-    public int getDeathCounter() {
-        return deathCounter;
-    }
-    public void addAnimal(Animal animal){
-        this.animals.add(animal);
-    }
-    public void removeAnimal(Animal animal){
-        this.animals.remove(animal);
-    }
     public void animalDied(Animal animal){
         removeAnimal(animal);
         upDeathCounter();
@@ -82,5 +55,5 @@ public class MapCell {
         }
         return isGrassPresent();
     }
-    public ArrayList<Animal> getAnimals(){ return this.animals; }
+
 }

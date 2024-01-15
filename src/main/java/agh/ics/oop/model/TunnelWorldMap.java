@@ -1,12 +1,16 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.enums.BehaviourType;
+import agh.ics.oop.model.interfaces.WorldElement;
+import agh.ics.oop.model.records.Boundary;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class TunnelWorldMap extends AbstractWorldMap{
+
+    // Konstruktory
 
     public TunnelWorldMap(int width, int height, BehaviourType behaviourType, int genomeSize, int minMutations, int maxMutations) {
         super(width, height, behaviourType, genomeSize, minMutations, maxMutations);
@@ -53,6 +57,8 @@ public class TunnelWorldMap extends AbstractWorldMap{
             }
         }
     }
+
+    // Metody
 
     @Override
     public void advanceAnimals(){

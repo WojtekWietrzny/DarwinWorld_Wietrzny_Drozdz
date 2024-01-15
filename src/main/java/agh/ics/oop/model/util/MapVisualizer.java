@@ -3,7 +3,7 @@ package agh.ics.oop.model.util;
 import agh.ics.oop.model.AbstractWorldMap;
 import agh.ics.oop.model.MapCell;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
+import agh.ics.oop.model.interfaces.WorldMap;
 
 
 //moved drawHeader to main draw function

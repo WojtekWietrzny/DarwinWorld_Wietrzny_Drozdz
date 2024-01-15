@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.records;
 
 import agh.ics.oop.model.enums.BehaviourType;
 import agh.ics.oop.model.enums.MapType;

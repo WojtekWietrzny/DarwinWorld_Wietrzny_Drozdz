@@ -1,5 +1,6 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.interfaces;
 
+import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.model.enums.MapDirection;
 
 public interface WorldElement {

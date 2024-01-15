@@ -1,4 +1,10 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.interfaces;
+
+import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.interfaces.MoveValidator;
+import agh.ics.oop.model.interfaces.WorldElement;
+import agh.ics.oop.model.records.Boundary;
 
 import java.util.List;
 

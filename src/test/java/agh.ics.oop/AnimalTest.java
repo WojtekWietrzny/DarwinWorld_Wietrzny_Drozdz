@@ -15,7 +15,7 @@ public class AnimalTest {
 
     @BeforeEach
     public void setUp() {
-        SphereWorldMap map = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8);
+        SphereWorldMap map = new SphereWorldMap(10, 10, BehaviourType.CompletePredestination, 8,1,4);
         this.map = map;
         animal = new Animal(map);
     }

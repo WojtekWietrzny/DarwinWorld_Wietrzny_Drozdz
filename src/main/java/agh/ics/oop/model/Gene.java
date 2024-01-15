@@ -54,7 +54,8 @@ public class Gene {
         Collections.shuffle(indexesToPick);
 
         for (int i=0; i<noMutations; i++){
-            this.dna.set(indexesToPick.get(i), random.nextInt(8));
+            int currentIndex = indexesToPick.get(i);
+            this.dna.set(currentIndex, (this.dna.get(currentIndex) + random.nextInt(7) + 1)%8);
         }
     }
 

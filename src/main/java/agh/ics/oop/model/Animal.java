@@ -80,8 +80,8 @@ public class Animal implements WorldElement {
         return newPosition;
     }
 
-    public Animal createChild(Animal other){
-        Gene childGene = this.gene.createChild(other.getGene(), this.energy, other.getEnergy());
+    public Animal createChild(Animal other, int minMutations, int maxMutations){
+        Gene childGene = this.gene.createChild(other.getGene(), this.energy, other.getEnergy(), minMutations, maxMutations);
         Vector2d childPosition = this.position;
         WorldMap childMap = this.map;
         return new Animal(childMap, childPosition, childGene);

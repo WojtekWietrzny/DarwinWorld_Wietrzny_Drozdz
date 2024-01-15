@@ -17,6 +17,9 @@ repositories {
 application {
   getMainClass().set('agh.ics.oop.World')
 }
+tasks.withType(JavaCompile).configureEach {
+  options.encoding = 'UTF-8'
+}
 
 java {
   toolchain {

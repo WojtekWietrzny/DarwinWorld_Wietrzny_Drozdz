@@ -26,6 +26,8 @@ public abstract class AbstractWorldMap implements WorldMap{
     private final int genomeSize;
     private final int minMutations;
     private final int maxMutations;
+    private Map<ArrayList<Integer>, Integer> genotypes = new HashMap<>();
+    private ArrayList<Integer> mostPopularDna = null;
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
     private static int nextId = 0;
@@ -105,9 +107,24 @@ public abstract class AbstractWorldMap implements WorldMap{
 
     public void place(Animal animal) {
         if(canMoveTo(animal.getPosition())){
-            elements.get(animal.getPosition()).addAnimal(animal);
             this.animalsQuantity += 1;
             this.totalAnimalEnergy += animal.getEnergy();
+
+            if (this.genotypes.containsKey(animal.getGene().getDna())){
+                this.genotypes.put(animal.getGene().getDna(), this.genotypes.get(animal.getGene().getDna()) + 1);
+            }else{
+                this.genotypes.put(animal.getGene().getDna(), 1);
+            }
+            if (this.mostPopularDna == null){
+                this.mostPopularDna = animal.getGene().getDna();
+            }else{
+                if (this.genotypes.get(animal.getGene().getDna()) > this.genotypes.get(this.mostPopularDna)){
+                    this.mostPopularDna = animal.getGene().getDna();
+                }
+            }
+
+
+            elements.get(animal.getPosition()).addAnimal(animal);
             animals.add(animal);
         }
     }

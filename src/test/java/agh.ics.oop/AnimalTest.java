@@ -40,7 +40,7 @@ public class AnimalTest {
 
     @Test
     public void testToString() {
-        assertEquals("N", animal.toString());
+        assertEquals("↑", animal.toString());
     }
 
     @Test

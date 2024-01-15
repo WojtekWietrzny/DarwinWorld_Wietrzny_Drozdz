@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReadParameters {
-    private static final String FILE = "obiektowe_wietrzny_drozdz/src/main/resources/setup.csv";
+    private static final String FILE = "src/main/resources/setup.csv";
 
     public static List<String[]> read() throws FileNotFoundException {
         List<String[]> options = new ArrayList<>();

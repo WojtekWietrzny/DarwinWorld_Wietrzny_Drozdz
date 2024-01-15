@@ -39,6 +39,5 @@ public class World {
         SimulationEngine simulationEngine = new SimulationEngine(simulations);
         Thread engineThread = new Thread(simulationEngine);
         engineThread.start();
-        System.out.println("System zakończył działanie");
     }
 }

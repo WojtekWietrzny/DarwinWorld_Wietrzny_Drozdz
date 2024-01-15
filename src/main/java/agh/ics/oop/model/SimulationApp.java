@@ -13,6 +13,7 @@ public class SimulationApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        System.setProperty("file.encoding", "UTF-8");
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         BorderPane viewRoot = loader.load();

@@ -41,7 +41,7 @@ public class Gene {
         }
     }
 
-    private void mutate(int minMutations, int maxMutations){
+    public void mutate(int minMutations, int maxMutations){
         Random random = new Random();
 
         int noMutations = random.nextInt(maxMutations - minMutations + 1) + minMutations;
@@ -59,7 +59,7 @@ public class Gene {
         }
     }
 
-    private void advance(){
+    public void advance(){
         if (this.behaviourType == BehaviourType.BitofCraziness){
             Random random = new Random();
             int actual = random.nextInt(100);

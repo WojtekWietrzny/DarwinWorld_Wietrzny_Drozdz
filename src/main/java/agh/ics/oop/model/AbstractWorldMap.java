@@ -45,8 +45,6 @@ public abstract class AbstractWorldMap implements WorldMap{
         float midPoint = Math.round(height/2);
         startMap(width, height);
         allPositions.sort((o1, o2) -> Float.compare(Math.abs(o1.getY() - midPoint), Math.abs(o2.getY() - midPoint)));
-        //emptyPositionsPreferred = allPositions.subList(0, (int) Math.round(0.2*width*height));
-        //emptyPositionsNotPreferred = allPositions.subList((int) Math.round(0.2*width*height), allPositions.size());
 
 
         for(int i = 0; i < (int) Math.round(0.2*width*height);i++){
@@ -73,17 +71,18 @@ public abstract class AbstractWorldMap implements WorldMap{
         }
     }
 
-    protected void notifyObservers() {
-        for (MapChangeListener observer : observers) {
-            observer.mapChanged(this);
-        }
-    }
     public  void addObserver(MapChangeListener observer){
         observers.add(observer);
     }
     public  void removeObserver(MapChangeListener observer){
         observers.remove(observer);
     }
+    protected void notifyObservers() {
+        for (MapChangeListener observer : observers) {
+            observer.mapChanged(this);
+        }
+    }
+
 
     public void generateAnimals(int amount){
         Random random = new Random();
@@ -129,10 +128,7 @@ public abstract class AbstractWorldMap implements WorldMap{
         }
     }
 
-    public void addGrass(Vector2d position){
-            MapCell cell = elements.get(position);
-            cell.growGrass();
-    }
+
 
     public void reduceAnimalEnergy(){
         for (Animal animal : this.animals){
@@ -256,6 +252,10 @@ public abstract class AbstractWorldMap implements WorldMap{
             return  ((emptyPositionsNotPreferred.size() > 0) || (emptyPositionsPreferred.size() > 0));
     }
 
+    public void addGrass(Vector2d position){
+        MapCell cell = elements.get(position);
+        cell.growGrass();
+    }
 
     //wyrastanie określonej ilości trawy - cała 1 faza dnia
     public void growGrass(int grassDaily){

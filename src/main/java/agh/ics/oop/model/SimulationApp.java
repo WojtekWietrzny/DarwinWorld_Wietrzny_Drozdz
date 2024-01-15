@@ -19,7 +19,6 @@ public class SimulationApp extends Application {
         BorderPane viewRoot = loader.load();
         SimulationPresenter presenter = loader.getController();
 
-
         configureStage(primaryStage, viewRoot);
 
         primaryStage.show();

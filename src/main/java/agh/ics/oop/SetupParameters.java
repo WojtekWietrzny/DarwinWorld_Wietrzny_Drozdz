@@ -78,8 +78,7 @@ public class SetupParameters {
         }
     }
 
-    public String getConfigurationName() {
-        return configurationName;
+    public String getConfigurationName() {return configurationName;
     }
 
     public MapType getMapType() {

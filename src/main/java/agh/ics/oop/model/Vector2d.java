@@ -8,37 +8,28 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class Vector2d {
+    //Atrybuty
     private int x;
     private int y;
 
+    //Konstruktory
     public Vector2d(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    //gettery
+    public int getX() {return x;}
+    public int getY() {return y;}
 
-    public int getX() {
-        return x;
-    }
-    public void setX(int val){
-        this.x = val;
-    }
-    public int getY() {
-        return y;
-    }
-    public void setY(int val){
-        this.y = val;
-    }
+    //settery
+    public void setX(int val){this.x = val;}
+    public void setY(int val){this.y = val;}
 
-    public String toString(){
-        return "(" + this.x + "," + this.y + ")";
-    }
-    public boolean precedes(Vector2d other){
-        return this.x <= other.x && this.y <= other.y;
-    }
-    public boolean follows(Vector2d other){
-        return this.x >= other.x && this.y >= other.y;
-    }
+    //Funkcjonalność
+    public String toString(){return "(" + this.x + "," + this.y + ")";}
+    public boolean precedes(Vector2d other){return this.x <= other.x && this.y <= other.y;}
+    public boolean follows(Vector2d other){return this.x >= other.x && this.y >= other.y;}
 
     public Vector2d add(Vector2d other){
         int x = this.x + other.x;
@@ -77,16 +68,4 @@ public class Vector2d {
     public int hashCode() {
         return Objects.hash(this.x, this.y);
     }
-    public static void main(String[] args) {
-        Vector2d position1 = new Vector2d(1,2);
-        System.out.println(position1.toString());
-        Vector2d position2 = new Vector2d(-2,1);
-        System.out.println(position2.toString());
-        System.out.println(position1.add(position2).toString());
-        MapDirection direction1 = MapDirection.NORTH;
-        System.out.println(direction1.next().toString());
-        System.out.println(direction1.previous().toString());
-        System.out.println(direction1.toUnitVector().toString());
-    }
-    //nie wiem co to tu robi, ale przynajmniej widać, że te metody działają
 }

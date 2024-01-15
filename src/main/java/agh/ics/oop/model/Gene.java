@@ -3,6 +3,7 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.enums.BehaviourType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 
@@ -40,12 +41,21 @@ public class Gene {
         }
     }
 
-    private void mutate(int mutationChance){
+    private void mutate(int minMutations, int maxMutations){
         Random random = new Random();
+
+        int noMutations = random.nextInt(maxMutations - minMutations + 1) + minMutations;
+        ArrayList<Integer> indexesToPick = new ArrayList<>();
+
         for(int i=0; i<this.dna.size(); i++){
-            if (random.nextInt(100) + 1 <= mutationChance){
-                this.dna.set(i, random.nextInt(8));
-            }
+            indexesToPick.add(i);
+        }
+
+        Collections.shuffle(indexesToPick);
+
+        for (int i=0; i<noMutations; i++){
+            int currentIndex = indexesToPick.get(i);
+            this.dna.set(currentIndex, (this.dna.get(currentIndex) + random.nextInt(7) + 1)%8);
         }
     }
 
@@ -65,7 +75,7 @@ public class Gene {
         }
     }
 
-    public Gene createChild(Gene other, int ownEnergy, int otherEnergy){
+    public Gene createChild(Gene other, int ownEnergy, int otherEnergy, int minMutations, int maxMutations){
         Random random = new Random();
         Gene dominantGene;
         Gene recesiveGene;
@@ -104,7 +114,7 @@ public class Gene {
             }
         }
         childGene.setDna(newDna);
-        childGene.mutate(80);
+        childGene.mutate(minMutations, maxMutations);
         return childGene;
     }
 }

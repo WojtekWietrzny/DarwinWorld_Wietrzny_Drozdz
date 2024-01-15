@@ -22,9 +22,9 @@ public class Simulation implements Runnable{
         // + statystyki
 
         if (this.simulationParameters.mapType() == MapType.SphereMap){
-            this.worldMap = new SphereWorldMap(simulationParameters.width(), simulationParameters.height(), simulationParameters.behaviourType(), simulationParameters.genomeSize());
+            this.worldMap = new SphereWorldMap(simulationParameters.width(), simulationParameters.height(), simulationParameters.behaviourType(), simulationParameters.genomeSize(), simulationParameters.minMutations(), simulationParameters.maxMutations());
         }else{
-            this.worldMap = new TunnelWorldMap(simulationParameters.width(), simulationParameters.height(), simulationParameters.behaviourType(), simulationParameters.genomeSize());
+            this.worldMap = new TunnelWorldMap(simulationParameters.width(), simulationParameters.height(), simulationParameters.behaviourType(), simulationParameters.genomeSize(), simulationParameters.minMutations(), simulationParameters.maxMutations());
         }
 
         ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();

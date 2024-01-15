@@ -3,6 +3,7 @@ package agh.ics.oop.model;
 import agh.ics.oop.model.enums.MapDirection;
 
 public class Animal implements WorldElement {
+    // Atrybuty
     private MapDirection orientation;
     private Vector2d position;
     private WorldMap map;
@@ -11,6 +12,8 @@ public class Animal implements WorldElement {
     private int age = 0;
     private int childCount = 0;
     private int amountOfGrassEaten = 0;
+
+    // Konstruktory
 
     public Animal(WorldMap map){
         this.orientation = MapDirection.NORTH;
@@ -23,65 +26,48 @@ public class Animal implements WorldElement {
         this.map = map;
         this.gene = gene;
     }
-    public String toString() {
-        return switch(orientation){
-            case NORTH -> "N";
-            case NORTHEAST -> "NE";
-            case EAST -> "E";
-            case SOUTHEAST -> "SE";
-            case SOUTH -> "S";
-            case SOUTHWEST -> "SW";
-            case WEST -> "W";
-            case NORTHWEST -> "NW";
 
-        };
+    // Settery
 
-    }
-
-    public boolean isAt(Vector2d second_position) {
-        return this.position.equals(second_position);
-    }
-    public Vector2d getPosition(){
-        return position;
-    }
-    public void setPosition(Vector2d position){
-        this.position = position;
-    }
-
-    public MapDirection getOrientation() {
-        return orientation;
-    }
     public void setOrientation(MapDirection mapDirection){
         this.orientation = mapDirection;
     }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-    public void addEnergy(int value) { this.energy += value; }
+    public void setEnergy(int energy) { this.energy = energy;}
     public void reduceEnergy(int value){ this.energy -= value; }
-    public Gene getGene() { return this.gene; }
-    public int getAge(){
-        return this.age;
-    }
-    public int getChildCount(){
-        return this.childCount;
-    }
+    public void addEnergy(int value) { this.energy += value; }
+    public void setPosition(Vector2d position){ this.position = position;}
     public void increaseChildCount(){
         this.childCount += 1;
-    }
-    public int getAmountOfGrassEaten(){
-        return this.amountOfGrassEaten;
     }
     public void increaseGrassEaten(){
         this.amountOfGrassEaten += 1;
     }
     public void age(){
         this.age += 1;
+    }
+
+    // Gettery
+
+    public MapDirection getOrientation() { return orientation; }
+    public Vector2d getPosition(){
+        return position;
+    }
+    public Gene getGene() { return this.gene; }
+    public int getAge(){
+        return this.age;
+    }
+    public int getEnergy() {
+        return energy;
+    }
+    public int getChildCount(){ return this.childCount;}
+    public int getAmountOfGrassEaten(){
+        return this.amountOfGrassEaten;
+    }
+
+    // Metody
+
+    public boolean isAt(Vector2d second_position) {
+        return this.position.equals(second_position);
     }
 
     public void move() {
@@ -108,5 +94,19 @@ public class Animal implements WorldElement {
         this.increaseChildCount();
         other.increaseChildCount();
         return new Animal(childMap, childPosition, childGene);
+    }
+
+    public String toString() {
+        return switch(orientation){
+            case NORTH -> "N";
+            case NORTHEAST -> "NE";
+            case EAST -> "E";
+            case SOUTHEAST -> "SE";
+            case SOUTH -> "S";
+            case SOUTHWEST -> "SW";
+            case WEST -> "W";
+            case NORTHWEST -> "NW";
+
+        };
     }
 }
